@@ -1,0 +1,32 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/day20?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /pay
+    username: guest
+    password: guest
+    publisher-confirms: true #消息从 product 到 exchange 后回调确认
+    publisher-returns: true #消息从 exchange 到 queue 后回调确认
+    listener:
+      direct:
+        acknowledge-mode: manual #监听端消息ACK确认模式为手动确认
+        prefetch: 1 #设置消费者每次可以处理的消息数量
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml  #配置mybatis的xml所在位置
+
+#配置控制台打印sql日志，为mybatis接口的包路径
+logging:
+  level:
+    com.wbw.mapper: debug
