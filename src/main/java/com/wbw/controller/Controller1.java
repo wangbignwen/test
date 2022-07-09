@@ -30,7 +30,7 @@ public class Controller1 {
 
     @GetMapping("/add")
     public String addOrder() {
-        //参数1 指定要发送的交换机的名称.
+        //参数1 指定要发送的交换机的名称..
         //参数2 指定要发送的routingkey
         //参数3 指定要发送的消息的本身数据
         //rabbitTemplate.convertAndSend("wbw_exchange", "wbw.add", "王炳文添加消息");
