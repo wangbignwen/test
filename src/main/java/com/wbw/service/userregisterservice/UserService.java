@@ -1,5 +1,6 @@
-package com.wbw.controller;
+package com.wbw.service.userregisterservice;
 
+import com.wbw.controller.UserRegisterEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService implements ApplicationEventPublisherAware { // <1>
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private ApplicationEventPublisher applicationEventPublisher;
 

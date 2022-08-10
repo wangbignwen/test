@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 
 @RestController
 @RequestMapping("/order")
-public class Controller1 {
+public class MqController {
     @Resource
     private RabbitTemplate rabbitTemplate;
 
