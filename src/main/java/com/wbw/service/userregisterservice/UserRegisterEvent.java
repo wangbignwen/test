@@ -1,4 +1,4 @@
-package com.wbw.controller;
+package com.wbw.service.userregisterservice;
 
 import org.springframework.context.ApplicationEvent;
 

@@ -1,6 +1,5 @@
 package com.wbw.service.userregisterservice;
 
-import com.wbw.controller.UserRegisterEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
