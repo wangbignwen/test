@@ -1,19 +1,15 @@
 package com.wbw.controller;
 
+import com.wbw.excel.ExcelTest;
 import com.wbw.service.Service1;
-import org.springframework.amqp.AmqpException;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 
 @RestController
 @RequestMapping("/order")
@@ -24,8 +20,12 @@ public class MqController {
     @Resource
     private Service1 service1;
 
+    @Resource
+    private ExcelTest excelTest;
+
+
     @GetMapping("/add")
-    public String addOrder() {
+    public String addOrder(HttpServletResponse response) throws Exception {
         //参数1 指定要发送的交换机的名称..
         //参数2 指定要发送的routingkey
         //参数3 指定要发送的消息的本身数据
@@ -40,44 +40,33 @@ public class MqController {
 
         // 给发送的消息设置过期时间
         //rabbitTemplate.convertAndSend("wbw_exchange", "ttl.add", "王炳文给10秒后过期的队列添加消息");
-        rabbitTemplate.convertAndSend("dlx_queue", (Object) "王炳文发送了一条有过期时间的消息", new MessagePostProcessor() {
-            @Override
-            public Message postProcessMessage(Message message) throws AmqpException {
-                message.getMessageProperties().setExpiration("5000");//设置该消息的过期时间
-                return message;
-            }
-        });
+//        rabbitTemplate.convertAndSend("dlx_queue", (Object) "王炳文发送了一条有过期时间的消息", new MessagePostProcessor() {
+//            @Override
+//            public Message postProcessMessage(Message message) throws AmqpException {
+//                message.getMessageProperties().setExpiration("5000");//设置该消息的过期时间
+//                return message;
+//            }
+//        });
 
-        //String str = "王炳文输出日志";
-        //outLogToTxt(str);
+//        String str = "王炳文输出日志";
+//        outLogToTxt(str);
 
         // 调数据库
         //service1.addUser("王炳文");
-
+        excelTest.exportExcel(response);
         return "success";
     }
 
+
     // 输出日志到桌面
     private static void outLogToTxt(String str) {
-        FileWriter fw = null;
-        PrintWriter pw = null;
         File file = new File("C:\\Users\\Administrator\\Desktop\\log.txt");
-        try {
-            fw = new FileWriter(file, true);
-            pw = new PrintWriter(fw);
-            pw.println(str);
-            pw.flush();
-        } catch (IOException e) {
+        try (FileWriter fw = new FileWriter(file, true);
+             BufferedWriter bw = new BufferedWriter(fw)) {
+            bw.write(str);
+            bw.newLine();
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            //关闭流
-            try {
-                fw.flush();
-                pw.close();
-                fw.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 }
