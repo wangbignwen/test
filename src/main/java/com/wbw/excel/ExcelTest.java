@@ -129,9 +129,9 @@ public class ExcelTest {
         cell.setCellValue(0);
 
         //设置页保护，锁定单元格才能生效
-        // sheet.protectSheet("mima"); // 锁表
+        // sheet.protectSheet("mima"); // 锁表，整个表不能操作
         sheet.disableLocking();
-        //sheet.enableLocking();
+        //sheet.enableLocking(); // 整个表都不能操作
         CTSheetProtection sheetProtection = sheet.getCTWorksheet().getSheetProtection();
         sheetProtection.setSelectLockedCells(false);
         sheetProtection.setSelectUnlockedCells(true);

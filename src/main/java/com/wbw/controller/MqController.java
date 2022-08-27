@@ -2,6 +2,7 @@ package com.wbw.controller;
 
 import com.wbw.excel.ExcelTest;
 import com.wbw.service.Service1;
+import org.apache.commons.logging.Log;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/order")
@@ -48,19 +50,26 @@ public class MqController {
 //            }
 //        });
 
-//        String str = "王炳文输出日志";
-//        outLogToTxt(str);
+        // 打印日志
+        for (int i = 0; i < 10; i++) {
+            String str = "输出日志次数"+i;
+            outLogToTxt(str);
+        }
+
 
         // 调数据库
         //service1.addUser("王炳文");
-        excelTest.exportExcel(response);
+        //excelTest.exportExcel(response);
         return "success";
     }
 
 
     // 输出日志到桌面
-    private static void outLogToTxt(String str) {
+    private static void outLogToTxt(String str) throws IOException {
         File file = new File("C:\\Users\\Administrator\\Desktop\\log.txt");
+        if (!file.exists()){
+            boolean flag = file.createNewFile();
+        }
         try (FileWriter fw = new FileWriter(file, true);
              BufferedWriter bw = new BufferedWriter(fw)) {
             bw.write(str);
