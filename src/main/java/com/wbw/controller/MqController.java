@@ -9,9 +9,16 @@ import com.wbw.service.Service1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +26,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -69,17 +79,68 @@ public class MqController {
         }
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id", "123");
-        jsonObject.put("name", "wang");
+        jsonObject.put("k", "v");
+
+        JSONObject jsonObject1 = new JSONObject();
+        jsonObject1.put("k1","v1");
+        JSONArray jSONArray1 = new JSONArray();
+        jSONArray1.add(jsonObject1);
+        jsonObject.put("k2",jSONArray1);
         JSONArray jSONArray = new JSONArray();
         jSONArray.add(jsonObject);
         List<Map<String, String>> mapsList = JSON.parseObject(JSON.toJSONString(jSONArray), new TypeReference<List<Map<String, String>>>() {
         });
 
+
+        //restTemplateText();
+
         // 调数据库
         //service1.addUser("王炳文");
         //excelTest.exportExcel(response);
         return "success";
+    }
+
+    private void restTemplateText() throws Exception {
+        RestTemplate restTemplate = new RestTemplate();
+        // -------------------------------> 解决(响应数据可能)中文乱码 的问题
+        List<HttpMessageConverter<?>> converterList = restTemplate.getMessageConverters();
+        converterList.remove(1); // 移除原来的转换器
+        // 设置字符编码为utf-8
+        HttpMessageConverter<?> converter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
+        converterList.add(1, converter); // 添加新的转换器(注:convert顺序错误会导致失败)
+        restTemplate.setMessageConverters(converterList);
+
+        // -------------------------------> (选择性设置)请求头信息
+        // HttpHeaders实现了MultiValueMap接口
+        HttpHeaders httpHeaders = new HttpHeaders();
+        // 给请求header中添加一些数据
+        httpHeaders.add("JustryDeng", "这是一个大帅哥!");
+
+        // -------------------------------> 注:GET请求 创建HttpEntity时,请求体传入null即可
+        // 请求体的类型任选即可;只要保证 请求体 的类型与HttpEntity类的泛型保持一致即可
+        String httpBody = null;
+        HttpEntity<String> httpEntity = new HttpEntity<>(httpBody, httpHeaders);
+
+        // -------------------------------> URI
+        StringBuffer paramsURL = new StringBuffer("http://127.0.0.1:8080/http/doHttpTest");
+        // 字符数据最好encoding一下;这样一来，某些特殊字符才能传过去(如:flag的参数值就是“&”,不encoding的话,传不过去)
+        paramsURL.append("?flag=" + URLEncoder.encode("&&", "utf-8"));
+        URI uri = URI.create(paramsURL.toString());
+
+        //  -------------------------------> 执行请求并返回结果
+        // 此处的泛型  对应 响应体数据   类型;即:这里指定响应体的数据装配为String
+        ResponseEntity<String> response =
+                restTemplate.exchange(uri, HttpMethod.GET, httpEntity, String.class);
+
+        // -------------------------------> 响应信息
+        //响应码,如:401、302、404、500、200等
+        System.out.println(response.getStatusCodeValue());
+        // 响应头
+        System.out.println(JSON.toJSON(response.getHeaders()));
+        // 响应体
+        if(response.hasBody()) {
+            System.out.println(response.getBody());
+        }
     }
 
 
