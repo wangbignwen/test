@@ -16,7 +16,7 @@ public class UserRegisterController {
  
     @GetMapping("/register")
     public String register(String username) {
-        userService.register(username);
+        //userService.register(username);
         return "success";
     }
  

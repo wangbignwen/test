@@ -1,9 +1,6 @@
 package com.wbw.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.wbw.excel.ExcelTest;
 import com.wbw.service.Service1;
 import org.slf4j.Logger;
@@ -15,6 +12,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +29,6 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -48,6 +46,7 @@ public class MqController {
     private ExcelTest excelTest;
 
 
+    @Transactional(rollbackFor = Exception.class,propagation = Propagation.REQUIRED)
     @GetMapping("/add")
     public String addOrder(HttpServletResponse response) throws Exception {
         //参数1 指定要发送的交换机的名称..
@@ -73,31 +72,38 @@ public class MqController {
 //        });
 
         // 打印日志
-        for (int i = 0; i < 10; i++) {
-            String str = "输出日志次数" + i;
-            outLogToTxt(str);
-        }
+//        for (int i = 0; i < 10; i++) {
+//            String str = "输出日志次数" + i;
+//            outLogToTxt(str);
+//        }
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("k", "v");
-
-        JSONObject jsonObject1 = new JSONObject();
-        jsonObject1.put("k1","v1");
-        JSONArray jSONArray1 = new JSONArray();
-        jSONArray1.add(jsonObject1);
-        jsonObject.put("k2",jSONArray1);
-        JSONArray jSONArray = new JSONArray();
-        jSONArray.add(jsonObject);
-        List<Map<String, String>> mapsList = JSON.parseObject(JSON.toJSONString(jSONArray), new TypeReference<List<Map<String, String>>>() {
-        });
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("k", "v");
+//
+//        JSONObject jsonObject1 = new JSONObject();
+//        jsonObject1.put("k1","v1");
+//        JSONArray jSONArray1 = new JSONArray();
+//        jSONArray1.add(jsonObject1);
+//        jsonObject.put("k2",jSONArray1);
+//        JSONArray jSONArray = new JSONArray();
+//        jSONArray.add(jsonObject);
+//        List<Map<String, String>> mapsList = JSON.parseObject(JSON.toJSONString(jSONArray), new TypeReference<List<Map<String, String>>>() {
+//        });
 
 
         //restTemplateText();
 
         // 调数据库
-        //service1.addUser("王炳文");
+        this.test1();
+        service1.addUser("王炳文");
+        int i= 1/0;
         //excelTest.exportExcel(response);
         return "success";
+    }
+
+    public void test1() throws Exception{
+        service1.addUser("王炳文1");
+        int i= 1/0;
     }
 
     private void restTemplateText() throws Exception {
@@ -122,10 +128,8 @@ public class MqController {
         HttpEntity<String> httpEntity = new HttpEntity<>(httpBody, httpHeaders);
 
         // -------------------------------> URI
-        StringBuffer paramsURL = new StringBuffer("http://127.0.0.1:8080/http/doHttpTest");
         // 字符数据最好encoding一下;这样一来，某些特殊字符才能传过去(如:flag的参数值就是“&”,不encoding的话,传不过去)
-        paramsURL.append("?flag=" + URLEncoder.encode("&&", "utf-8"));
-        URI uri = URI.create(paramsURL.toString());
+        URI uri = URI.create("http://127.0.0.1:8080/demo/register" + "?flag=" + URLEncoder.encode("&&", "utf-8"));
 
         //  -------------------------------> 执行请求并返回结果
         // 此处的泛型  对应 响应体数据   类型;即:这里指定响应体的数据装配为String

@@ -14,8 +14,9 @@ public class Service1Impl implements Service1 {
     public String addUser(String name) {
         User user = new User();
         user.setId(1001);
-        user.setName("王炳文");
+        user.setName(name);
         mapper1.add(user);
+        int i= 1/0;
         return "success";
     }
 }
