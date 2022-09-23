@@ -15,10 +15,10 @@ public class Test2 {
     Map<String, Job> jobMap;
 
     public void test() {
-        jobList.forEach(Job::doJob);
-        jobMap.keySet().forEach(o->{
-            if (o.contains("order1")){
-                jobMap.get(o).doJob();
+        jobList.get(0).doJob();
+        jobMap.keySet().forEach(i->{
+            if (i.contains("job1")){
+                jobMap.get(i).doJob();
             }
         });
     }
