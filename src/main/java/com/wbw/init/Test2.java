@@ -1,6 +1,5 @@
 package com.wbw.init;
 
-import com.wbw.init.Orders;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -10,16 +9,16 @@ import java.util.Map;
 @Component
 public class Test2 {
     @Resource
-    List<Orders> ordersList;
+    List<Job> jobList;
 
     @Resource
-    Map<String, Orders> ordersMap;
+    Map<String, Job> jobMap;
 
     public void test() {
-        ordersList.forEach(Orders::doJob);
-        ordersMap.keySet().forEach(o->{
+        jobList.forEach(Job::doJob);
+        jobMap.keySet().forEach(o->{
             if (o.contains("order1")){
-                ordersMap.get(o).doJob();
+                jobMap.get(o).doJob();
             }
         });
     }

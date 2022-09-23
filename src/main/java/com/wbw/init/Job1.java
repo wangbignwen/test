@@ -4,14 +4,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
-@Order(1)
-public class Order2 extends Orders {
-    public Order2(){
-        System.out.println("order2初始化完成");
+@Order(2)
+public class Job1 extends Job {
+    public Job1(){
+        System.out.println("Job1初始化完成");
     }
 
     @Override
     public void doJob() {
-        System.out.println("按顺序做第一类事");
+        System.out.println("Job1中的doJob");
     }
 }

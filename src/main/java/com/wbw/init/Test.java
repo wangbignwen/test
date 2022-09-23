@@ -7,11 +7,11 @@ import java.util.List;
 @Component
 public class Test {
 
-    List<Orders> ordersList;
+    List<Job> jobList;
 
-    public Test(Test2 test2, List<Orders> orders) {
+    public Test(Test2 test2, List<Job> jobList) {
         test2.test();
-        this.ordersList=orders;
+        this.jobList=jobList;
         System.out.println("test初始化完成");
     }
 }
