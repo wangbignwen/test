@@ -13,7 +13,7 @@ public class Test {
         test2.test();
         this.jobList=jobList;
         this.test();
-        System.out.println("test初始化完成");
+        System.out.println("test初始化完成");    
     }
 
     private void test() {
