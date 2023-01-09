@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wbw.mapper.Mapper1">
-<insert id="add" parameterType="com.wbw.pojo.User">
-    insert into user
-    (username)
-    values
-    (#{param.name})
-</insert>
+    <insert id="add" parameterType="com.wbw.pojo.User">
+        insert into user
+        (username)
+        values
+        (#{param.name})
+    </insert>
+
+    <select id="get" resultType="java.util.Map">
+        select * from user
+        where
+        id = #{id}
+    </select>
 </mapper>
