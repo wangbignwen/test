@@ -3,12 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion><!--定义maven版本-->
+
 
     <groupId>com.wbw</groupId>
-    <artifactId>mq-springboot</artifactId>
+    <artifactId>test</artifactId><!--尽量与projectName保持相同-->
     <version>1.0</version>
-    <!--spring框架依赖-->
+
+    <!--springboot父类框架依赖，内含自动装配依赖，mavenBuildPlugins工具-->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
