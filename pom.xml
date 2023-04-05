@@ -8,7 +8,8 @@
 
     <groupId>com.wbw</groupId>
     <artifactId>test</artifactId><!--尽量与projectName保持相同-->
-    <version>1.0</version>
+    <version>${project.release.version}</version><!--采用占位符形式，控制部署到快照仓库或发布仓库-->
+    <packaging>jar</packaging>
 
     <!--springBoot父类框架依赖，内含自动装配依赖，mavenBuildPlugins工具，profile定义环境工具-->
     <parent>
@@ -94,6 +95,11 @@
 
 </dependencies>
 
+    <!--默认的版本号-->
+    <properties>
+        <project.release.version>0.1-SNAPSHOT</project.release.version>
+    </properties>
+
     <!--配置-->
     <profiles>
         <profile>
@@ -105,36 +111,41 @@
     </profiles>
 
 
-    <!--    私仓管理-->
-<!--    <distributionManagement>-->
-<!--        <repository>-->
-<!--            <id>wbw2</id>-->
-<!--            <name>wbw-release</name>-->
-<!--            <url>http://120.48.87.190:8081/repository/wbw-release/</url>-->
-<!--        </repository>-->
-<!--&lt;!&ndash;        <snapshotRepository>&ndash;&gt;-->
-<!--&lt;!&ndash;            <id>wbw2-snapshots</id>&ndash;&gt;-->
-<!--&lt;!&ndash;            <name>libs-snapshots</name>&ndash;&gt;-->
-<!--&lt;!&ndash;            <url>http://test.nexus.com/libs-snapshots</url>&ndash;&gt;-->
-<!--&lt;!&ndash;        </snapshotRepository>&ndash;&gt;-->
-<!--    </distributionManagement>-->
+    <!--定义snapshots库和releases库的nexus地址，
+    使用mvn deploy 将jar包推到私仓，使用的是默认的版本号0.1-SNAPSHOT,推到SNAPSHOT仓
+    使用mvn deploy -P release时，使用的是id为release的project配置的版本号即0.1
+    -->
+    <distributionManagement>
+        <repository>
+            <id>wbw2</id>  <!--与setting文件中的serverId对应，设定登录该仓库的账号密码-->
+            <name>wbw-release</name>
+            <url>http://120.48.87.190:8081/repository/wbw-release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>wbw2-snapshots</id>
+            <name>libs-snapshots</name>
+            <url>http://test.nexus.com/libs-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
-<!--    &lt;!&ndash;打包方式&ndash;&gt;-->
-<!--    <packaging>maven-plugin</packaging>-->
-<!--    <dependencies>-->
-<!--        &lt;!&ndash;使用doc的方式&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.maven</groupId>-->
-<!--            <artifactId>maven-plugin-api</artifactId>-->
-<!--            <version>3.5.2</version>-->
-<!--        </dependency>-->
-<!--        <dependency>&lt;!&ndash;使用注解的方式&ndash;&gt;-->
-<!--            <groupId>org.apache.maven.plugin-tools</groupId>-->
-<!--            <artifactId>maven-plugin-annotations</artifactId>-->
-<!--            <version>3.5.2</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-<!--    </dependencies>-->
+    <!-- 配置远程仓库，下载pom使用该仓库 -->
+   <repositories>
+       <repository>
+           <id>jboss</id>
+           <name>JBoss Repository</name>
+           <url>http://repository.jboss.com/maven2/</url>
+           <releases>
+               <enabled>true</enabled>  <!--表示可以下载该仓库的release版本pom-->
+               <updatePolicy>always</updatePolicy>  <!--更新策略为每次构建都更新-->
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>  <!--表示不可以下载该仓库的快照版本pom-->
+                <checksumPolicy>warn</checksumPolicy><!--构建校验异常时，输出警告信息-->
+            </snapshots>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+
 
 
 
