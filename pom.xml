@@ -19,20 +19,21 @@
 
 <dependencies>
 
-    <!--内含tomcat，mvc，web等web应用必要的依赖-->
+    <!--内含tomcat，springmvc，springWeb等web应用必要的依赖-->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
-    <!--mybatis 配置文件需定义mapper.xml文件路径-->
+    <!--mybatis底层就是jdbc  配置文件需在mybatis.mapper-locations中定义mapper.xml文件路径，
+    dao层的@Mapper，启动类的@MapperScan-->
     <dependency>
         <groupId>org.mybatis.spring.boot</groupId>
         <artifactId>mybatis-spring-boot-starter</artifactId>
         <version>3.0.1</version>
     </dependency>
 
-    <!--mysql驱动，JDBC是java程序连接数据库的工具包,druid是一种JDBC连接池-->
+    <!--需配置 数据库用户密码，数据库地址，驱动-->
     <!--scope 控制当前依赖在不同时期编译期、测试期、运行期生效的关系-->
     <dependency>
         <groupId>mysql</groupId>
@@ -40,6 +41,7 @@
         <scope>runtime</scope>
     </dependency>
 
+    <!--test-->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-test</artifactId>
