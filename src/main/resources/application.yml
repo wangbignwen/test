@@ -24,7 +24,7 @@ spring:
 
 
 mybatis:
-  mapper-locations: classpath:mapper/*.xml  #配置mybatis的xml所在位置
+  mapper-locations: classpath:mapper/*.xml  #配置mybatis的xml所在位置 classpath为resources目录下
 
 #配置控制台打印sql日志，为mybatis接口的包路径
 logging:

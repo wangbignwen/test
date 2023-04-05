@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 import java.util.Map;
 
-@Mapper
+
 public interface Mapper1 {
     Integer add(@Param("param") User user);
 
